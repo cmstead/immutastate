@@ -3,11 +3,11 @@ const gwt = require('fluent-gwt').configure({});
 
 const Immutastate = require('../index');
 
-describe('Immutastate Instances', function() {
-    
-    describe('Instantiation and Inheritance', function() {
-        
-        it('throws an error during instantiation if not inherited from', function(){
+describe('Immutastate Instances', function () {
+
+    describe('Instantiation and Inheritance', function () {
+
+        it('throws an error during instantiation if not inherited from', function () {
             return gwt
                 .given(
                     'Immutatstate is not inherited from',
@@ -23,13 +23,13 @@ describe('Immutastate Instances', function() {
                 );
         });
 
-        it('does not throw an error during instantiation if inherited from', function(){
+        it('does not throw an error during instantiation if inherited from', function () {
             return gwt
                 .given(
                     'Immutatstate is inherited from',
                     () => {
                         return Immutastate
-                            .extendedBy(function InheritingState() {})
+                            .extendedBy(function InheritingState() { })
                             .withPrototype({});
                     }
                 )
@@ -47,7 +47,7 @@ describe('Immutastate Instances', function() {
             return gwt
                 .given(
                     'a class extends Immutastate',
-                    function() {
+                    function () {
                         class ExtendedState extends Immutastate {
                             constructor() {
                                 super();
@@ -64,28 +64,28 @@ describe('Immutastate Instances', function() {
                 .then(
                     'No error should be thrown',
                     (instantiation) => assert.doesNotThrow(instantiation)
-                );            
+                );
         });
 
     });
 
-    describe('Extension and use', function() {
+    describe('Extension and use', function () {
 
         let TestState;
 
-        beforeEach(function() {
+        beforeEach(function () {
             TestState = Immutastate
-                .extendedBy(function() {})
+                .extendedBy(function () { })
                 .withPrototype({});
         });
-        
-        it('creates an instantiable Immutatstate object when using extendedBy', function(){
+
+        it('creates an instantiable Immutatstate object when using extendedBy', function () {
             return gwt
                 .given(
                     'an instantiable state object set up with extendedBy',
-                    function() {
+                    function () {
                         return Immutastate
-                            .extendedBy(function(){})
+                            .extendedBy(function () { })
                             .withPrototype({});
                     }
                 )
@@ -99,13 +99,13 @@ describe('Immutastate Instances', function() {
                 );
         });
 
-        it('adds prototype methods to instantiable state object prototype when extending Immutastate', function(){
+        it('adds prototype methods to instantiable state object prototype when extending Immutastate', function () {
             return gwt
                 .given(
                     'an extending state object is created',
-                    function() {
+                    function () {
                         return Immutastate
-                            .extendedBy(function() {})
+                            .extendedBy(function () { })
                             .withPrototype({
                                 foo: () => 'bar'
                             });
@@ -121,7 +121,7 @@ describe('Immutastate Instances', function() {
                 );
         });
 
-        it('adds properties to state object when initializeState is called on a new state object', function(){
+        it('adds properties to state object when initializeState is called on a new state object', function () {
             return gwt
                 .given(
                     'a state object is created',
@@ -139,7 +139,7 @@ describe('Immutastate Instances', function() {
                 );
         });
 
-        it('makes state properties immutable on state initialization', function(){
+        it('makes state properties immutable on state initialization', function () {
             return gwt
                 .given(
                     'state is initialized into state object',
@@ -160,6 +160,48 @@ describe('Immutastate Instances', function() {
                 .then(
                     'state value has not changed',
                     (testState) => assert.equal(testState.myValue, 'yay!')
+                );
+        });
+
+        it('updates state properties when state is updated by property key', function () {
+            return gwt
+                .given(
+                    'state is initialized'
+                )
+                .when(
+                    'a single state property is updated by key'
+                )
+                .then(
+                    'state property was updated correctly',
+                    () => { throw new Error('test not written') }
+                );
+        });
+
+        it('updates state with a mutator function', function () {
+            return gwt
+                .given(
+                    'state is initialized'
+                )
+                .when(
+                    'state is updated with a mutator function'
+                )
+                .then(
+                    'state values were updated',
+                    () => { throw new Error('test not written') }
+                );
+        });
+
+        it('updates state through a direct trigger', function () {
+            return gwt
+                .given(
+                    'mutation trigger is attached to state'
+                )
+                .when(
+                    'state mutation behavior is triggered'
+                )
+                .then(
+                    'state property was updated as expected',
+                    () => { throw new Error('test not written') }
                 );
         });
     });
