@@ -166,32 +166,54 @@ describe('Immutastate Instances', function () {
         it('updates state properties when state is updated by property key', function () {
             return gwt
                 .given(
-                    'state is initialized'
+                    'state is initialized',
+                    function() {
+                        const testState = new TestState();
+                        return testState.initializeState({
+                            test: 'value'
+                        });
+                    }
                 )
                 .when(
-                    'a single state property is updated by key'
+                    'a single state property is updated by key',
+                    (testState) => testState.updateProperty('test', 'a new value')
                 )
                 .then(
                     'state property was updated correctly',
-                    () => { throw new Error('test not written') }
+                    (testState) => assert.equal(testState.test, 'a new value')
                 );
         });
 
         it('updates state with a mutator function', function () {
             return gwt
                 .given(
-                    'state is initialized'
+                    'state is initialized',
+                    function() {
+                        const testState = new TestState();
+                        return testState.initializeState({
+                            testing: 'this is a test'
+                        })
+                    }
                 )
                 .when(
-                    'state is updated with a mutator function'
+                    'state is updated with a mutator function',
+                    (testState) => testState.update(function(currentState) {
+                        return {
+                            moreTesting: 'this is an update: ' + currentState.testing
+                        }
+                    })
                 )
                 .then(
                     'state values were updated',
-                    () => { throw new Error('test not written') }
+                    function(testState) {
+                        assert.equal(testState.testing, 'this is a test');
+                        assert.equal(testState.moreTesting, 'this is an update: this is a test');
+                    }
                 );
         });
 
-        it('updates state through a direct trigger', function () {
+        // Momentarily on hold
+        it.skip('updates state through a direct trigger', function () {
             return gwt
                 .given(
                     'mutation trigger is attached to state'
@@ -200,8 +222,7 @@ describe('Immutastate Instances', function () {
                     'state mutation behavior is triggered'
                 )
                 .then(
-                    'state property was updated as expected',
-                    () => { throw new Error('test not written') }
+                    'state property was updated as expected'
                 );
         });
     });

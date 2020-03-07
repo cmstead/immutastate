@@ -16,18 +16,41 @@
     }
 
     Immutastate.prototype = {
-        addStateProperty: function (key, value) {
+        addStateProperty: function (key) {
             Object.defineProperty(this, key, {
                 get() {
-                    return value;
+                    return this.__state[key];
                 }
             });
         },
+
         initializeState: function (stateObject) {
             Object.keys(stateObject)
                 .forEach(key =>
-                    this.addStateProperty(key, stateObject[key]));
+                    this.addStateProperty(key));
 
+            Object.defineProperty(this, '__state', {
+                value: Object.create(stateObject)
+            });
+
+            return this;
+        },
+
+        updateProperty: function(key, value) {
+            this.__state[key] = value;
+
+            return this;
+        },
+
+        update: function(mutator) {
+            const newProperties = mutator(Object.create(this.__state));
+
+            Object.keys(newProperties)
+                .forEach(key =>{
+                    this.addStateProperty(key);
+                    this.__state[key] = newProperties[key];
+                });
+            
             return this;
         }
     };
